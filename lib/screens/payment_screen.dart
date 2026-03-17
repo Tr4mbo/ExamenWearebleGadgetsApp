@@ -90,6 +90,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
               obscureCardCvv: true,
               isHolderNameVisible: true,
               cardBgColor: Colors.deepPurple,
+              labelCardHolder: 'TITULAR',
+              labelExpiredDate: 'MM/AA',
+              labelValidThru: 'VÁLIDO\nHASTA',
               onCreditCardWidgetChange: (CreditCardBrand creditCardBrand) {},
             ),
             Expanded(
@@ -108,6 +111,36 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       cardHolderName: cardHolderName,
                       expiryDate: expiryDate,
                       onCreditCardModelChange: onCreditCardModelChange,
+                      cardNumberValidator: (String? cardNumber) {
+                        if (cardNumber == null || cardNumber.isEmpty) {
+                          return 'Este campo es obligatorio';
+                        }
+                        if (cardNumber.replaceAll(' ', '').length < 16) {
+                          return 'Número de tarjeta incompleto';
+                        }
+                        return null;
+                      },
+                      inputConfiguration: InputConfiguration(
+                        cardNumberDecoration: InputDecoration(
+                          labelText: 'Número de Tarjeta',
+                          hintText: 'XXXX XXXX XXXX XXXX',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                        expiryDateDecoration: InputDecoration(
+                          labelText: 'Fecha de Expiración',
+                          hintText: 'MM/YY',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                        cvvCodeDecoration: InputDecoration(
+                          labelText: 'CVV',
+                          hintText: 'XXX',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                        cardHolderDecoration: InputDecoration(
+                          labelText: 'Titular de la Tarjeta',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 20),
                     if (_isLoading)
